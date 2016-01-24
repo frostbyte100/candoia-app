@@ -1,7 +1,7 @@
 {
   "name": "candoia-app",
   "productName": "Candoia App",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A base Candoia App",
   "main": "home.html",
   "scripts": {
