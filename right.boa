@@ -1,0 +1,11 @@
+# What are the names of the files changed each year?
+p: Project = input;
+
+names: output collection [time] of string;
+
+visit(p, visitor{
+	before node: Revision -> {
+	    foreach(i: int; node.files[i])
+	        names[node.commit_date] << node.files[i].name;
+	}
+});

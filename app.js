@@ -1,23 +1,33 @@
-console.log("Testing if this is even showing");
+'use strict';
+$(window).load(function() {
+    console.log("True start!");
 
-api.store.put("mySecretKey", 6000);
+    api.store.put("mySecretKey", 6000);
 
-var results = api.boa.run("my-boa-script.boa");
+    let json = api.boa.run("right.boa");
 
-// var results = api.boa.exec("p: Project = input;"+
-// "counts: output sum[string] of int;"+
-// "committers: map[string] of bool;"+
-// "visit(p, visitor {"+
-// "	before node: Revision ->"+
-// "		if (!haskey(committers, node.committer.username)) {"+
-// "			committers[node.committer.username] = true;"+
-// "			counts[p.id] << 1;"+
-// "		}");
 
-for (var x in results)
-{
-  // for (var y in x)
-  // {
-    console.log(x);
-  // }
-};
+    console.log(json);
+
+    var countRev = 0;
+    var s = "";
+    for(let time in json['names'])
+    {
+      countRev++;
+      console.log(countRev);
+      var d = new Date(time);
+      var q = d.getTime()*1000;
+      s += "<h2>" + time +"</h2>"
+      for(let name in json['names'][time])
+      {
+        s+="<p>"+json['names'][time][name]+"</p>";
+      }
+      s+="<br>"
+      console.log(s);
+    }
+
+
+    $("#display").html("<div>"+s+"</div>");
+
+    console.log("End of everything!");
+});
