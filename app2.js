@@ -2,7 +2,11 @@
 $(window).load(function() {
     var countRev = 0;
     $('#loading').hide();
-    // $('#pause').hide();
+    $('#pause').hide();
+    var tables = [];
+    var index = 0;
+    var s = "";
+
     window.getData = function()
     {
       api.store.put("mySecretKey", 6000);
@@ -31,15 +35,17 @@ $(window).load(function() {
       return k.getTime()/1000;
     }
 
-    window.showResults = function()
-    {
+    // window.showResults = function()
+    // {
       var start = parseInt(convertToUnix( document.getElementById("start").value )) *1000000;
       var end = parseInt(convertToUnix(document.getElementById("end").value))       *1000000;
 
-      if(start >= end){
+      if(start >= end)
+      {
         $("#display").html("ERROR: RANGE DOES NOT EXIST");
       }
-      if(document.getElementById("all").checked){
+      if(document.getElementById("all").checked)
+      {
         start = 0;
         end = parseInt(convertToUnix(new Date()))*1000000;
       }
@@ -47,11 +53,6 @@ $(window).load(function() {
       $('#loading').show();
       var json = getData();
 
-      console.log("Trying to sleep");
-      sleep(2000);
-      var s = "";
-      console.log("slept");
-      $('#loading').hide();
 
       var tab = "";
       for(let time in json['names'])
@@ -82,30 +83,79 @@ $(window).load(function() {
 
 
       }
-      lastS(last);
 
-      // $("#display").html("<div>"+s+"</div>");
-      // $('#loading').hide();
     }
-    
+    window.fillTables = function()
+    {
+      var start = parseInt(convertToUnix( document.getElementById("start").value )) *1000000;
+      var end = parseInt(convertToUnix(document.getElementById("end").value))       *1000000;
+
+      if(start >= end)
+      {
+        $("#display").html("<h2>ERROR: RANGE DOES NOT EXIST</h2>");
+      }
+      if(document.getElementById("all").checked)
+      {
+        start = 0;
+        end = parseInt(convertToUnix(new Date()))*1000000;
+      }
+      $('#loading').show();
+      var json = getData();
+      $('#loading').hide();
+      var tab = "";
+      for(let time in json['names'])
+      {
+          countRev++;
+          if( start <= parseInt(time) && parseInt(time) <= end)
+          {
+            tab += "<center><table id='" + countRev + "'>";
+            tab += "<thead>" +timeConverter( parseInt(time) ) + "</thead>";
+            for(let name in json['names'][time])
+            {
+              tab += "<tr><td>"+json['names'][time][name] + "</td></tr>";
+            }
+            tab += "</table></center>";
+            tables.push(tab);
+            tab = "";
+          }
+      }
+    }
+    window.procedd = function()
+    {
+      for(var x in tables)
+      {
+        showTable(x);
+      }
+      $("#display").html(tables[tables.length-1]);
+    }
+
+    window.nextOne = function(x)
+    {
+      if( parseInt(x)==1 && parseInt(x)+index >= tables.length)
+      {
+        $("#display").html("<h2>OUT OF RANGE!</h2>");
+      }
+      else if ( parseInt(x)==-1 && index+parseInt(x) < 0)
+      {
+        $("#display").html("<h2>OUT OF RANGE!</h2>");
+      }
+      else
+      {
+        index+=parseInt(x);
+        $("#display").html(tables[index]);
+      }
+    }
     window.showTable = function(x, id)
     {
       // sleep(1000);
       $("#display").toggle(function(){
         $("#display").html(x);
-        sleep(5000);
+        sleep(4000);
       });
       // sleep(1000);
 
       // document.getElementById("display").innerHTML = x;
     }
-    window.lastS = function(x)
-    {
-      // document.getElementById("display").innerHTML = x;
-      $("#display").html(x);
-      // $('#pause').hide();
-    }
-
     window.sleep = function(miliseconds)
     {
      var currentTime = new Date().getTime();
@@ -118,4 +168,5 @@ $(window).load(function() {
     {
       sleep(5000);
     }
+
 });

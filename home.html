@@ -9,24 +9,37 @@
 
     <script src="jquery-1.12.2.min.js"></script>
     <script src="d3.min.js"></script>
-    <script src="app.js"></script>
+    <script src="app2.js"></script>
 
   </head>
   <body>
 
     <div id="main">
       <h1>Source Code Visualization</h1>
-      <p>Ths is my application for Candoia. Let's see if this works.</p>
+      <p>Looking at the history of your project is important. Clicking on the radio button to see entire history.</p>
+      <h3>Time Interval:</h3>
+       <input type='radio' id="all">All Data</input><br>
+	     Start Date: <input type="text" id="start" name="startDate" value="January 1, 2015 00:00:00" size="25"><br>
+	     End Date: <input type="text" id="end" name="endDate" value="March 17, 2015 00:00:00" size="25"><br>
 
-      <button type='radio'>All Data</button>
-      <input id="start" type="text" name="start" placeholder="start: MM/YYYY:" value=""></input>
-      <input id="end" type="text" name="end" placeholder="end:  MM/YYYY" value=""></input>
-      <input type="submit" onClick="javascript:showResults()">
+      <button onClick="fillTables()">Fill Tables</button>
+      <br>
 
+      <button onClick="procedd()">Animate</button>
+      <br>
+
+      <left><button onClick="nextOne(1)">Forwards</button></left>
+      <right><button onClick="nextOne(-1)">Backwards</button></right>
+
+      <div id='loading'>
+        <p><center>Please wait while the boa query runs...</center></p>
+      </div>
     </div>
 
     <div id="display">
     </div>
-
+    <!-- <div id="pause">
+      <input type="submit" onClick="pause()">Pause</input>
+    </div> -->
   </body>
 </html>
